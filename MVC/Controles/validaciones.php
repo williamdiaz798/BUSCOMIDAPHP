@@ -19,7 +19,7 @@
             $nombre = $rowUsuario['NombreUsuario'];
             $pass = $rowUsuario['Password'];
 
-            if($Usuario == $rowUsuario['NombreUsuario']){
+            if($Usuario == $rowUsuario['NombreUsuario']  && $rowUsuario['TipoUsuario'] == 1){
                 $_SESSION['usuario'] = $Usuario;
                 header('location:?url=index');
             }else{
