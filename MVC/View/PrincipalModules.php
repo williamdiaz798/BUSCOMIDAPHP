@@ -34,14 +34,14 @@
                         <a id="logo-container" href="?url=index" class="brand-logo">BusComida</a>
                         <ul class="right hide-on-med-and-down">
                         <li><a href="?url=index">Lista Restaurantes</a></li>
-                        <li><a href="/listaCategorias.html">Lista Castegorias</a></li>
-                        <li><a href="MVC/Controles/cerrarSesion.php">Cerrar Sesion</a></li>
+                        <li><a href="?url=cate">Lista Castegorias</a></li>
+                        <li><a href="?url=cerrar">Cerrar Sesion</a></li>
                         </ul>
                 
                         <ul id="nav-mobile" class="sidenav">
                         <li><a href="?url=index">Lista Restaurantes</a></li>
-                        <li><a href="/listaCategorias.html">Lista Castegorias</a></li>
-                        <li><a href="MVC/Controles/cerrarSesion.php">Cerrar Sesion</a></li>
+                        <li><a href="?url=cate">Lista Castegorias</a></li>
+                        <li><a href="?url=cerrar">Cerrar Sesion</a></li>
                         </ul>
                         <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                     </div>
@@ -148,18 +148,27 @@
                     ?>
                         <div class="container min-height">
                             <div class="container min-height">
-                                    <form action="MVC/Controller/upProduc.php" method="post" enctype="multipart/form-data">
+                                    <form action="?url=atualizarRestaurante" method="post" enctype="multipart/form-data">
                                         <label for="nombreprod">Nombre</label>
-                                        <input type="text" name="NombreProd" id="nombreprod" value = <?php echo $rowRestaurantes['NombreRestaurante'];?> required max = 100>
+                                        <textarea name="NombreProd" id="nombreprod" cols="30" rows="10" class = 'materialize-textarea'><?php echo $rowRestaurantes['NombreRestaurante'];?></textarea>
                                         <br>
-                                        <select name="Categoria" style="display: block;">                                         <!-- En caso de no aparecer ingresar el style-->
+                                        <label for="especialidad">Especialidad</label>
+                                        <textarea name="Especialidad" id="especialidad" cols="30" rows="10" class = 'materialize-textarea'><?php echo $rowRestaurantes['EspecialidadRestaurante'];?></textarea>
+                                        <br>
+                                        <label for="direccion">Direccion</label>
+                                        <textarea name="Direccion" id="direccion" cols="30" rows="10" class = 'materialize-textarea'><?php echo $rowRestaurantes['DireccionRestaurante'];?></textarea>
+                                        <br>
+                                        <label for="categoria">Categoria</label>
+                                        <br><br>
+                                        <input type="hidden" name="idRestaurante" value = <?php echo $rowRestaurantes['IdRestaurante'];?>>
+                                        <select name="Categoria" id = 'categoria' style="display: block;">                                         <!-- En caso de no aparecer ingresar el style-->
                                         <?php
                                         $rsCategorias = categorias();
                                             while($rowCategorias = mysqli_fetch_assoc($rsCategorias)){
                                                 
                                                 if( $rowRestaurantes['IdCategoria'] == $rowCategorias['IdCateria']){
                                                     ?>
-                                                        <option value="<?php echo $rowCategorias['idCateria'];?>" disabled selected><?php echo $rowCategorias['NombreCateria'];?></option>
+                                                        <option value="<?php echo $rowCategorias['IdCateria'];?>" selected><?php echo $rowCategorias['NombreCateria'];?></option>
                                                     <?php
                                                     break;
                                                 }
@@ -170,7 +179,7 @@
                                                 $rsCategorias = categorias();
                                                 while($rowCategorias = mysqli_fetch_assoc($rsCategorias)){
                                                     ?>
-                                                        <option value="<?php echo $rowCategorias['idCateria'];?>" ><?php echo $rowCategorias['NombreCateria'];?></option>
+                                                        <option value="<?php echo $rowCategorias['IdCateria'];?>" ><?php echo $rowCategorias['NombreCateria'];?></option>
                                                     <?php
                                                 }
                                             ?>
@@ -186,7 +195,7 @@
                                         <br>
                                         <!-- <div class="mapouter"><div class="gmap_canvas"><iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=san%20salvador&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.utilitysavingexpert.com">Utility Saving Expert</a></div><style>.mapouter{position:relative;text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div> -->
                                         <br><br>
-                                        <input type="submit" value="Editar Restaurante" class="btn color">
+                                        <input type="submit" value="Editar Restaurante" class="btn color"  name = 'enviar'>
                                         
                                         <br><br>
                                     </form>
@@ -194,15 +203,27 @@
                     </div>
                     <?php
                     
+                }else{
+                    //header('location:?url=index');
                 }
             }
         }else{
             ?>
             <div class="container min-height">
                 <div class="container min-height">
-                        <form action="MVC/Controller/upProduc.php" method="post" enctype="multipart/form-data">
+                        <form action="?url=agregarRestaurante" method="post" enctype="multipart/form-data">
                             <label for="nombreprod">Nombre</label>
                             <input type="text" name="NombreProd" id="nombreprod" required>
+                            <br>
+
+                            <label for="especialidad">Especialidad</label>
+                            <input type="text" name="Especialidad" id="especialidad" required>
+                            <br><br>
+                            <label for="direccion">Direccion</label>
+                            <textarea name="Direccion" id="direccion" cols="30" rows="10" class = 'materialize-textarea'></textarea>
+                            <br>
+                            <label for="categoria">Categoria</label>
+                            <br>
                             <br>
                             <select name="Categoria" style="display: block;">                                         <!-- En caso de no aparecer ingresar el style-->
                                 <option value="" disabled selected>Selecione una categoria</option>
@@ -210,29 +231,112 @@
                                     $rsCategorias = categorias();
                                     while($rowCategorias = mysqli_fetch_assoc($rsCategorias)){
                                         ?>
-                                            <option value="<?php echo $rowCategorias['idCateria'];?>" ><?php echo $rowCategorias['NombreCateria'];?></option>
+                                            <option value="<?php echo $rowCategorias['IdCateria'];?>" ><?php echo $rowCategorias['NombreCateria'];?></option>
                                         <?php
                                     }
                                 ?>
                             
                             </select>
                             <br>
-                            <br><br><br>   
+                            <br>
                             <label for="latitudRestaurante">Latitud</label>
-                            <input type="number" name="latitudRestaurante" id="latitudRestaurante" required>
+                            <input type="number" name="latitudRestaurante" id="latitudRestaurante" required step = 'any'>
                             <br><br><br>
                             <label for="longitudRestaurante">Longitud</label>
-                            <input type="number" name="longitudRestaurante" id="longitudRestaurante" required>
+                            <input type="number" name="longitudRestaurante" id="longitudRestaurante" required step = 'any'>
                             <br>
                             <!-- <div class="mapouter"><div class="gmap_canvas"><iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=san%20salvador&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.utilitysavingexpert.com">Utility Saving Expert</a></div><style>.mapouter{position:relative;text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div> -->
                             <br><br>
-                            <input type="submit" value="Agregar Restaurante" class="btn color">
+                            <input type="submit" value="Agregar Restaurante" class="btn color" name = 'enviar'>
                             
                             <br><br>
                         </form>
                     </div>
         </div>
         <?php
+        }
+    }
+
+    function listaCategorias(){
+        ?>
+            <div class="container min-height">
+            <h3>Lista de Categorias</h3>
+            <div class="row">
+                <div class="col s6">
+                    <a href="?url=crearCate">
+                        <h3>Añadir</h3>
+                    </a>
+                </div>
+                
+            </div>
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Categoria</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <?php
+                        $rsCategorias = categorias();
+                        while($rowCategorias = mysqli_fetch_assoc($rsCategorias)){
+                            ?>
+                                <tr>
+                                    <td><?= $rowCategorias['NombreCateria']?></td>
+                                    <th><a href="?url=editarCate&idCate=<?php echo $rowCategorias['IdCateria'];?>">Editar</a></th>
+                                </tr>
+                            <?php
+                        }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+        <?php
+    }
+
+
+    function crearEditaCategoria($idCategoria){
+        if($idCategoria != null){
+            $rsCategorias = categorias();
+            while($rowCategorias = mysqli_fetch_assoc($rsCategorias)){
+                if($rowCategorias['IdCateria'] == $idCategoria){
+                ?>
+                    <div class="container min-height">
+                        <div class="container min-height">
+                                <form action="?url=actualizarCate" method="post" enctype="multipart/form-data">
+                                    <label for="nombreprod">Nombre</label>
+                                    <textarea name="NombreProd" id="nombreprod" cols="30" rows="10" class = 'materialize-textarea'><?= $rowCategorias['NombreCateria']?></textarea>
+
+                                    <input type="hidden" name="idCate" value = <?= $rowCategorias['IdCateria']?>>
+
+                                    <br/>
+                                    <br/>
+                                    <input type="submit" value="Agregar Categoria" class="btn color" name = 'enviar'>
+                                    
+                                    <br><br>
+                                </form>
+                            </div>
+                        </div>
+                <?php
+                }
+            }
+        }else{
+            ?>
+                <div class="container min-height">
+                <div class="container min-height">
+                        <form action="?url=agregarCate" method="post" enctype="multipart/form-data">
+                            <label for="nombreprod">Nombre</label>
+                            <input type="text" name="NombreProd" id="nombreprod" required>
+                            <br/>
+                            <br/>
+                            <input type="submit" value="Agregar Categoria" class="btn color" name = 'enviar'>
+                            
+                            <br><br>
+                        </form>
+                    </div>
+                </div>
+            <?php
         }
     }
 
